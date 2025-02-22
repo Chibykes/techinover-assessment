@@ -1,5 +1,33 @@
 @import "tailwindcss";
 
+@theme {
+  --color-sidebar-active: #F5F3FF;
+  --color-sidebar-border-active: #4F35F3;
+  --color-sidebar-text-default: #65676D;
+  --color-sidebar-text-active: #4F35F3;
+}
+
+@font-face {
+  font-family: "SF Pro Text";
+  font-weight: 400;
+  src: url("./assets/fonts/SFPRODISPLAYREGULAR.OTF") format("opentype");
+}
+@font-face {
+  font-family: "SF Pro Text";
+  font-weight: 500;
+  src: url("./assets/fonts/SFPRODISPLAYMEDIUM.OTF") format("opentype");
+}
+@font-face {
+  font-family: "SF Pro Text";
+  font-weight: 600;
+  src: url("./assets/fonts/SFPRODISPLAYBOLD.OTF") format("opentype");
+}
+
+*{
+  font-family: "SF Pro Text", sans-serif;
+}
+
+/* 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -67,4 +95,4 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
-}
+} */
