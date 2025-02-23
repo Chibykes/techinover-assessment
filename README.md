@@ -38,5 +38,3 @@ Clone the repository and install dependencies:
 ![App Preview](./src/assets/preview.gif)
 
 ### 📝 License
-
--
