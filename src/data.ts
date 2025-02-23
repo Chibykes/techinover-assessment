@@ -1,4 +1,7 @@
 import { ColumnInterface, TaskInterface } from "./types";
+import prepMeal from "./assets/img/prep-meal.png";
+import readBook from "./assets/img/read-book.png";
+import publishBook from "./assets/img/publish-book.png";
 
 const Columns: ColumnInterface[] = [
   { id: "todo", name: "To do" },
@@ -12,7 +15,7 @@ const DefaultTask: TaskInterface[] = [
     columnId: "todo",
     priority: "high",
     taskName: "Publish my first book",
-    coverPhoto: "",
+    coverPhoto: publishBook,
     description:
       "Write a blog post outlining the top 10 productivity tips for busy professionals. The post should be engaging, informative, and include actionable advice. Target word count: 1,200 words.",
     deadline: "2025-02-22T15:00:00.892Z",
@@ -53,7 +56,7 @@ const DefaultTask: TaskInterface[] = [
     columnId: "in-progress",
     priority: "low",
     taskName: "Prep my week meal",
-    coverPhoto: "",
+    coverPhoto: prepMeal,
     description: "",
     deadline: "2025-02-22T15:00:00.892Z",
     createdAt: "2025-02-22T15:00:00.892Z",
@@ -63,7 +66,7 @@ const DefaultTask: TaskInterface[] = [
     columnId: "completed",
     priority: "medium",
     taskName: "Read a book",
-    coverPhoto: "",
+    coverPhoto: readBook,
     description: "",
     deadline: "2025-02-22T15:00:00.892Z",
     createdAt: "2025-02-22T15:00:00.892Z",

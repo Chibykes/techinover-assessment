@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import DashboardIcon from "../icons/DashboardIcon";
 import InboxIcon from "../icons/InboxIcon";
 import NotesIcon from "../icons/NotesIcon";
@@ -7,6 +7,8 @@ import SettingsIcon from "../icons/SettingsIcon";
 import { JSX } from "react/jsx-runtime";
 import clsx from "clsx";
 import logo from "../../assets/logo.svg";
+import { CreateAppLevelContext } from "../../contexts/app";
+import { HiOutlineXCircle } from "react-icons/hi";
 
 type IconType = (
   props: JSX.IntrinsicAttributes & React.SVGProps<SVGSVGElement>,
@@ -27,9 +29,23 @@ const sidebarLinks: SidebarLinkInterface[] = [
 
 const Sidebar = () => {
   const [active, setActive] = useState("/calendar");
+  const { state, setState } = useContext(CreateAppLevelContext);
   return (
-    <aside className="h-full w-[270px] py-8">
-      <div className="pt-6 py-12">
+    <aside
+      className={clsx(
+        "fixed top-0 -left-full z-[99] h-full w-[280px] bg-white py-8 shadow-xl duration-200 lg:static lg:shadow-none",
+        state.showSidebar ? "left-0" : "-left-full",
+      )}
+    >
+      <button
+        className="absolute top-4 right-4 cursor-pointer lg:hidden"
+        onClick={() =>
+          setState?.((n) => ({ ...n, showSidebar: !n.showSidebar }))
+        }
+      >
+        <HiOutlineXCircle size={24} className="lg:hidden" />
+      </button>
+      <div className="py-12 pt-6">
         <img className="m-auto h-auto w-[175px]" src={logo} />
       </div>
 

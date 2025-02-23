@@ -44,7 +44,7 @@ const ColumnContainer = ({ id, name, tasks }: ColumnContainerInterface) => {
         ))}
       </div>
 
-      {showModal && <ModifyTask onClose={() => setShowModal(false)} />}
+      {showModal && <ModifyTask columnId={id as string} onClose={() => setShowModal(false)} />}
     </div>
   );
 };

@@ -8,17 +8,12 @@ interface TaskCardInterface {
 }
 
 const DraggableCard = ({ data }: TaskCardInterface) => {
-  const { attributes, listeners, setNodeRef } = useDraggable({
+  const { setNodeRef } = useDraggable({
     id: data?.id,
   });
 
   return (
-    <div
-      ref={setNodeRef}
-      {...listeners}
-      {...attributes}
-      onClick={(event) => event?.stopPropagation()}
-    >
+    <div ref={setNodeRef}>
       <MainTaskCard data={data} />
     </div>
   );

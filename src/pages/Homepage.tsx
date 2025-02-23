@@ -50,31 +50,33 @@ const Homepage = () => {
     <div className="relative flex h-screen w-screen">
       <Sidebar />
 
-      <div className="flex max-h-full w-full flex-col gap-8 p-12">
+      <div className="flex max-h-full w-full flex-col gap-8 p-4 lg:p-12">
         <Header />
 
-        <div className="grid h-full grid-cols-3 items-start gap-4 pb-2">
-          <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-            {state?.columns.map((column) => (
-              <ColumnContainer
-                key={column.id}
-                id={column.id}
-                name={column.name}
-                tasks={state?.filteredTask?.filter(
-                  (task) => task?.columnId === column?.id,
-                )}
-              />
-            ))}
+        <div className="w-full h-full overflow-auto">
+          <div className="grid h-full min-w-5xl grid-cols-3 items-start gap-4 pb-2">
+            <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+              {state?.columns.map((column) => (
+                <ColumnContainer
+                  key={column.id}
+                  id={column.id}
+                  name={column.name}
+                  tasks={state?.filteredTask?.filter(
+                    (task) => task?.columnId === column?.id,
+                  )}
+                />
+              ))}
 
-            <DragOverlay
-              className={clsx(
-                "rounded-[6px] outline outline-indigo-600",
-                rotateDeg,
-              )}
-            >
-              {activeTask ? <MainTaskCard data={activeTask} isOverlay /> : null}
-            </DragOverlay>
-          </DndContext>
+              <DragOverlay
+                className={clsx(
+                  "rounded-[6px] outline outline-indigo-600",
+                  rotateDeg,
+                )}
+              >
+                {activeTask ? <MainTaskCard data={activeTask} isOverlay /> : null}
+              </DragOverlay>
+            </DndContext>
+          </div>
         </div>
       </div>
     </div>

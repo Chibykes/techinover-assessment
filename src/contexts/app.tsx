@@ -4,6 +4,7 @@ import { Columns, DefaultTask } from "../data";
 import moment from "moment";
 
 interface DefaultStateInterface {
+  showSidebar: boolean;
   search: string;
   columns: ColumnInterface[];
   tasks: TaskInterface[];
@@ -12,6 +13,7 @@ interface DefaultStateInterface {
 }
 
 const initialState = {
+  showSidebar: false,
   search: "",
   columns: [],
   tasks: [],
@@ -38,6 +40,7 @@ const AppContext = ({ children }: { children: React.ReactNode }) => {
   };
 
   const [state, setState] = useState<DefaultStateInterface>({
+    showSidebar: false,
     search: "",
     columns: Columns,
     tasks: getLocalStorageTasks(),

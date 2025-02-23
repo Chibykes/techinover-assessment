@@ -1,13 +1,14 @@
+import { clsx } from "clsx";
+import { useFormik } from "formik";
+import moment from "moment";
+import { useContext, useEffect, useState } from "react";
 import { CgClose } from "react-icons/cg";
+import { FaRegTrashAlt } from "react-icons/fa";
+import * as yup from "yup";
 import uploadImage from "../../assets/upload.svg";
-import { useContext, useState } from "react";
 import { CreateAppLevelContext } from "../../contexts/app";
 import { TaskInterface } from "../../types";
-import { useFormik } from "formik";
-import * as yup from "yup";
-import { clsx } from "clsx";
-import { FaRegTrashAlt } from "react-icons/fa";
-import moment from "moment";
+import notify from "../../utilities/notify";
 
 interface ModifyTaskInterface {
   columnId?: string;
@@ -16,18 +17,28 @@ interface ModifyTaskInterface {
   onClose: () => void;
 }
 
-const ModifyTask = ({ columnId, forEdit, onClose }: ModifyTaskInterface) => {
+const ModifyTask = ({
+  columnId,
+  task,
+  forEdit,
+  onClose,
+}: ModifyTaskInterface) => {
   const { setState } = useContext(CreateAppLevelContext);
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
       columnId: columnId || "todo",
-      priority: "",
-      taskName: "",
-      coverPhoto: "",
-      description: "",
-      deadlineDate: "",
-      deadlineTime: "",
+      priority: task?.priority || "",
+      taskName: task?.taskName || "",
+      coverPhoto: task?.coverPhoto || "",
+      description: task?.description || "",
+      deadlineDate: task?.deadline
+        ? moment(task?.deadline).format("YYYY-MM-DD")
+        : "",
+      deadlineTime: task?.deadline
+        ? moment(task?.deadline).format("HH:mm")
+        : "",
     },
     validationSchema: yup.object({
       columnId: yup.string().required(),
@@ -37,8 +48,8 @@ const ModifyTask = ({ columnId, forEdit, onClose }: ModifyTaskInterface) => {
       deadlineTime: yup.string().required("Deadline time is required"),
     }),
     onSubmit: (values) => {
-      const newTask: TaskInterface = {
-        id: crypto.randomUUID(),
+      const formattedTask: TaskInterface = {
+        id: task?.id || crypto.randomUUID(),
         columnId: values.columnId as string,
         priority: values.priority as TaskInterface["priority"],
         taskName: values.taskName,
@@ -48,22 +59,40 @@ const ModifyTask = ({ columnId, forEdit, onClose }: ModifyTaskInterface) => {
           `${values.deadlineDate} ${values?.deadlineTime}`,
           "YYYY-MM-DD HH:mm",
         ).format(),
-        createdAt: moment().format(),
+        createdAt: task?.createdAt || moment().format(),
       };
-      console.table(newTask);
 
-      setState?.((n) => ({
-        ...n,
-        search: "",
-        tasks: [...n.tasks, newTask],
-      }));
+      console.table(formattedTask);
+
+      if (task || forEdit) {
+        setState?.((n) => ({
+          ...n,
+          search: "",
+          tasks: n.tasks.map((task) => {
+            if (task.id === formattedTask.id) {
+              return formattedTask;
+            }
+
+            return task;
+          }),
+        }));
+        notify("Task Edited");
+      } else {
+        setState?.((n) => ({
+          ...n,
+          search: "",
+          tasks: [...n.tasks, formattedTask],
+        }));
+        notify("New Task Added");
+      }
 
       onClose();
     },
   });
 
   const [file, setFile] = useState<File | null>(null);
-  const [base64, setBase64] = useState<string | null>(null);
+  const [base64, setBase64] = useState<string | null>(formik.values.coverPhoto);
+  const [dragging, setDragging] = useState(false);
 
   const convertToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -74,6 +103,13 @@ const ModifyTask = ({ columnId, forEdit, onClose }: ModifyTaskInterface) => {
     });
   };
 
+  const handleFile = async (file: File) => {
+    const base64String = await convertToBase64(file);
+    setFile(file);
+    setBase64(base64String);
+    console.log("blob_url", URL.createObjectURL(file));
+  };
+
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -81,11 +117,34 @@ const ModifyTask = ({ columnId, forEdit, onClose }: ModifyTaskInterface) => {
     if (selectedFile) {
       const base64String = await convertToBase64(selectedFile);
       setFile(selectedFile);
-      // setPreview(URL.createObjectURL(selectedFile));
-      formik.setValues({ ...formik.values, coverPhoto: base64String });
       setBase64(base64String);
+      console.log("blob_url", URL.createObjectURL(selectedFile));
     }
   };
+
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+    event.preventDefault();
+    setDragging(true);
+  };
+
+  const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+    setDragging(false);
+  };
+
+  const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+    event.preventDefault();
+    setDragging(false);
+    const file = event.dataTransfer.files?.[0];
+    if (file) handleFile(file);
+  };
+
+  useEffect(() => {
+    formik.setValues({ ...formik.values, coverPhoto: base64 || "" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [base64]);
 
   return (
     <div className="fixed top-0 left-0 isolate z-50 h-full w-full p-8">
@@ -213,12 +272,25 @@ const ModifyTask = ({ columnId, forEdit, onClose }: ModifyTaskInterface) => {
                 Upload cover
                 <span className="font-normal text-[#848585]">(Optional)</span>
               </label>
-              <div className="mt-2 flex justify-center rounded-lg border border-gray-300 p-4">
-                {base64 ? (
+              <div
+                className={clsx(
+                  "mt-2 flex justify-center rounded-lg border border-gray-300 p-4",
+                  dragging && "border-indigo-600",
+                )}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+              >
+                {base64 || formik.values.coverPhoto ? (
                   <div className="flex items-center justify-between gap-4">
-                    <img className="w-[40%] rounded-sm" src={base64} />
+                    <img
+                      className="w-[40%] rounded-sm"
+                      src={base64 || formik.values.coverPhoto}
+                    />
                     <div className="flex w-full flex-col gap-2">
-                      <p className="text-sm font-medium">{file?.name}</p>
+                      <p className="max-w-[200px] truncate text-sm font-medium">
+                        {file?.name}
+                      </p>
                       <p className="text-xs font-normal text-neutral-600">
                         {file?.size ? (file?.size / 1024 / 1024).toFixed(2) : 0}{" "}
                         MB
@@ -258,16 +330,20 @@ const ModifyTask = ({ columnId, forEdit, onClose }: ModifyTaskInterface) => {
                         htmlFor="file-upload"
                         className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 focus-within:outline-hidden hover:text-indigo-500"
                       >
-                        <span className="font-medium">Click to upload</span>
-                        <input
-                          id="file-upload"
-                          name="file-upload"
-                          type="file"
-                          className="sr-only"
-                          onChange={handleFileChange}
-                        />
+                        <span className="font-medium">
+                          {dragging ? "Drop file here..." : "Click to upload"}
+                        </span>
+                        {!dragging && (
+                          <input
+                            id="file-upload"
+                            name="file-upload"
+                            type="file"
+                            className="sr-only"
+                            onChange={handleFileChange}
+                          />
+                        )}
                       </label>
-                      <p className="pl-1">or drag and drop</p>
+                      {!dragging && <p className="pl-1">or drag and drop</p>}
                     </div>
                     <p className="text-xs/5 text-gray-600">PNG, JPG</p>
                   </div>

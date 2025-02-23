@@ -7,11 +7,11 @@
   --color-sidebar-text-default: #65676d;
   --color-sidebar-text-active: #4f35f3;
   --color-date-change-border: #dcdcdc;
-  
+
   --color-icon-primary: #b0babf;
   --color-colum-bg: #f5f7f9;
-  
-  --color-button-primary: #4F35F3;
+
+  --color-button-primary: #4f35f3;
 
   --shadow-column-container:
     0px 1px 1px 0px #0000000f, 0px 0px 0px 1px #3c425714,
@@ -37,4 +37,9 @@
 
 * {
   font-family: "SF Pro Text", sans-serif;
+}
+
+:root {
+  --toastify-toast-shadow: none;
+  --toastify-toast-padding: 0;
 }
