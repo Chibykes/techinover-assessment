@@ -1,6 +1,7 @@
 # Techinover Assessment
 
 This is the GitHub repository for the Techinover assessment submission by **Chukwubuikem Chiabuotu**.
+Live preview: [deployed here](https://techinover-assessment-chibykes.netlify.app/)
 
 ## 🚀 Technologies Used
 
