@@ -19,7 +19,7 @@ const DefaultTask: TaskInterface[] = [
     coverPhoto: publishBook,
     description:
       "Write a blog post outlining the top 10 productivity tips for busy professionals. The post should be engaging, informative, and include actionable advice. Target word count: 1,200 words.",
-    deadline: "2025-02-22T15:00:00.892Z",
+    deadline: "2025-02-24T15:00:00.892Z",
     createdAt: moment().format() || "2025-02-22T15:00:00.892Z",
   },
   {
@@ -29,7 +29,7 @@ const DefaultTask: TaskInterface[] = [
     taskName: "Home Renovation",
     coverPhoto: "",
     description: "Write a blog post outlining the top 10 products",
-    deadline: "2025-02-22T15:00:00.892Z",
+    deadline: "2025-02-25T15:00:00.892Z",
     createdAt: moment().format() || "2025-02-22T15:00:00.892Z",
   },
   {
@@ -39,7 +39,7 @@ const DefaultTask: TaskInterface[] = [
     taskName: "Organize a charity event",
     coverPhoto: "",
     description: "",
-    deadline: "2025-02-22T15:00:00.892Z",
+    deadline: "2025-02-25T15:00:00.892Z",
     createdAt: moment().format() || "2025-02-22T15:00:00.892Z",
   },
   {
