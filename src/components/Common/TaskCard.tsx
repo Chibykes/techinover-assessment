@@ -3,18 +3,18 @@ import clsx from "clsx";
 import moment from "moment";
 import { useContext, useEffect, useRef, useState } from "react";
 import { HiFlag, HiOutlineDotsHorizontal } from "react-icons/hi";
-import { CreateAppLevelContext } from "../../contexts/app";
+import { CreateAppLevelContext } from "../../contexts/AppContext";
 import { TaskInterface } from "../../types";
-import ModifyTask from "./ModifyTask";
-import PriorityBadge from "./PriorityBadge";
 import notify from "../../utilities/notify";
+import PriorityBadge from "./PriorityBadge";
+import TaskForm from "./TaskForm";
 
 interface TaskCardInterface {
   data: TaskInterface;
   isOverlay?: boolean;
 }
 
-const MainTaskCard = ({ data, isOverlay }: TaskCardInterface) => {
+const TaskCard = ({ data, isOverlay }: TaskCardInterface) => {
   const modifyButtonRef = useRef<HTMLButtonElement>(null);
   const modifyDropdownRef = useRef<HTMLDivElement>(null);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -23,13 +23,6 @@ const MainTaskCard = ({ data, isOverlay }: TaskCardInterface) => {
   const { active, listeners, attributes } = useDraggable({
     id: data?.id,
   });
-
-  const rotateDeg =
-    data?.columnId === "todo"
-      ? "rotate-3"
-      : data?.columnId === "in-progress"
-        ? "rotate-0"
-        : "-rotate-3";
 
   const handleDeleteEvent = () => {
     setState?.((n) => ({
@@ -59,31 +52,23 @@ const MainTaskCard = ({ data, isOverlay }: TaskCardInterface) => {
     <>
       <div
         className={clsx(
-          "shadow-task-card relative isolate flex flex-col gap-4 rounded-[6px] bg-white p-4 duration-200 select-none",
-          active?.id === data?.id
-            ? "relative z-[99] cursor-grabbing"
-            : "cursor-grab !opacity-100",
-          active?.id === data?.id &&
-            isOverlay &&
-            `${rotateDeg} border border-indigo-600`,
-          active?.id === data?.id &&
-            !isOverlay &&
-            "after:absolute after:top-0 after:left-0 after:z-[11] after:h-full after:w-full after:rounded-[6px] after:border after:border-dashed after:border-indigo-400 after:bg-indigo-50",
+          "shadow-task-card relative isolate flex flex-col gap-4 rounded-[6px] p-4 duration-200 select-none",
+          active?.id === data?.id && !isOverlay
+            ? "relative z-[99] cursor-grabbing border border-dashed border-indigo-400 bg-indigo-50 [&_*]:invisible"
+            : "cursor-grab bg-white",
         )}
       >
         <PriorityBadge variant={data?.priority} />
 
-        <div className="z-10 flex items-center justify-between gap-4">
+        <div className="flex items-center justify-between gap-4">
           <p className="font-medium">{data?.taskName}</p>
-          <div className="relative isolate">
+          <div className="relative isolate z-10">
             <button
               ref={modifyButtonRef}
-              data-dndkit-no-drag
               className="cursor-pointer rounded-[6px] border border-neutral-300 p-1"
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                console.log("clicked dropdown");
                 setShowDropdown((n) => !n);
               }}
             >
@@ -92,7 +77,6 @@ const MainTaskCard = ({ data, isOverlay }: TaskCardInterface) => {
             {showDropdown && (
               <div
                 ref={modifyDropdownRef}
-                data-dndkit-no-drag
                 className="absolute top-[120%] right-0 z-30 flex flex-col overflow-hidden rounded-[6px] border border-neutral-300 bg-white"
               >
                 <button
@@ -164,10 +148,10 @@ const MainTaskCard = ({ data, isOverlay }: TaskCardInterface) => {
       </div>
 
       {showModify && (
-        <ModifyTask task={data} onClose={() => setShowModify(false)} forEdit />
+        <TaskForm task={data} onClose={() => setShowModify(false)} forEdit />
       )}
     </>
   );
 };
 
-export default MainTaskCard;
+export default TaskCard;

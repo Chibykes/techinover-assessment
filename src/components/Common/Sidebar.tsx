@@ -7,7 +7,7 @@ import SettingsIcon from "../icons/SettingsIcon";
 import { JSX } from "react/jsx-runtime";
 import clsx from "clsx";
 import logo from "../../assets/logo.svg";
-import { CreateAppLevelContext } from "../../contexts/app";
+import { CreateAppLevelContext } from "../../contexts/AppContext";
 import { HiOutlineXCircle } from "react-icons/hi";
 
 type IconType = (
@@ -33,7 +33,7 @@ const Sidebar = () => {
   return (
     <aside
       className={clsx(
-        "fixed top-0 -left-full z-[99] h-full w-[280px] bg-white py-8 shadow-xl duration-200 lg:static lg:shadow-none",
+        "fixed top-0 -left-full z-[99] h-full w-[280px] shrink-0 bg-white py-8 shadow-xl duration-200 lg:static lg:shadow-none",
         state.showSidebar ? "left-0" : "-left-full",
       )}
     >

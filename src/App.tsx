@@ -1,11 +1,10 @@
-import "./App.css";
-import AppContext from "./contexts/app";
+import AppContextProvider from "./contexts/AppContext";
 import Homepage from "./pages/Homepage";
 import { Bounce, ToastContainer } from "react-toastify";
 
 function App() {
   return (
-    <AppContext>
+    <AppContextProvider>
       <Homepage />
       <ToastContainer
         position="bottom-left"
@@ -20,7 +19,7 @@ function App() {
         theme="light"
         transition={Bounce}
       />
-    </AppContext>
+    </AppContextProvider>
   );
 }
 

@@ -1,22 +1,22 @@
 import { useDraggable } from "@dnd-kit/core";
 import { TaskInterface } from "../../types";
-import MainTaskCard from "./MainTaskCard";
+import TaskCard from "./TaskCard";
 
 interface TaskCardInterface {
   data: TaskInterface;
   isOverlay?: boolean;
 }
 
-const DraggableCard = ({ data }: TaskCardInterface) => {
+const DraggableTaskCard = ({ data }: TaskCardInterface) => {
   const { setNodeRef } = useDraggable({
     id: data?.id,
   });
 
   return (
     <div ref={setNodeRef}>
-      <MainTaskCard data={data} />
+      <TaskCard data={data} />
     </div>
   );
 };
 
-export default DraggableCard;
+export default DraggableTaskCard;

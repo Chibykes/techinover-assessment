@@ -6,7 +6,7 @@ import {
   HiArrowSmRight,
   HiOutlineMenuAlt1,
 } from "react-icons/hi";
-import { CreateAppLevelContext } from "../../contexts/app";
+import { CreateAppLevelContext } from "../../contexts/AppContext";
 
 const Header = () => {
   const { state, setState } = useContext(CreateAppLevelContext);
@@ -65,7 +65,7 @@ const Header = () => {
         </div>
       </div>
 
-      <div className="relative w-full lg:min-w-[250px]">
+      <div className="relative w-full lg:w-[250px]">
         <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3.5">
           <CgSearch className="text-icon-primary" />
         </div>

@@ -2,23 +2,33 @@ import { useContext, useState } from "react";
 import ColumnContainer from "../components/Common/ColumnContainer";
 import Header from "../components/Common/Header";
 import Sidebar from "../components/Common/Sidebar";
-import { CreateAppLevelContext } from "../contexts/app";
+import { CreateAppLevelContext } from "../contexts/AppContext";
 import {
   DndContext,
   DragEndEvent,
   DragOverlay,
   DragStartEvent,
+  KeyboardSensor,
+  MouseSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
 } from "@dnd-kit/core";
 
 import { clsx } from "clsx";
 import { TaskInterface } from "../types";
-import MainTaskCard from "../components/Common/MainTaskCard";
+import TaskCard from "../components/Common/TaskCard";
 
 const Homepage = () => {
   const { state, setState } = useContext(CreateAppLevelContext);
   const [activeTask, setActiveTask] = useState<TaskInterface | undefined>(
     undefined,
   );
+  const mouseSensor = useSensor(MouseSensor);
+  const touchSensor = useSensor(TouchSensor);
+  const keyboardSensor = useSensor(KeyboardSensor);
+
+  const sensors = useSensors(mouseSensor, touchSensor, keyboardSensor);
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
 
@@ -50,12 +60,16 @@ const Homepage = () => {
     <div className="relative flex h-screen w-screen">
       <Sidebar />
 
-      <div className="flex max-h-full w-full flex-col gap-8 p-4 lg:p-12">
+      <div className="flex max-h-full w-full flex-col gap-8 p-4 lg:p-8">
         <Header />
 
-        <div className="w-full h-full overflow-auto">
-          <div className="grid h-full min-w-5xl grid-cols-3 items-start gap-4 pb-2">
-            <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+        <div className="h-full max-w-full overflow-auto">
+          <div className="relative grid h-full min-w-6xl grid-cols-3 items-start gap-4 pb-2 lg:min-w-full">
+            <DndContext
+              sensors={sensors}
+              onDragStart={handleDragStart}
+              onDragEnd={handleDragEnd}
+            >
               {state?.columns.map((column) => (
                 <ColumnContainer
                   key={column.id}
@@ -73,7 +87,7 @@ const Homepage = () => {
                   rotateDeg,
                 )}
               >
-                {activeTask ? <MainTaskCard data={activeTask} isOverlay /> : null}
+                {activeTask ? <TaskCard data={activeTask} isOverlay /> : null}
               </DragOverlay>
             </DndContext>
           </div>

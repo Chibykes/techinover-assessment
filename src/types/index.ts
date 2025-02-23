@@ -13,3 +13,12 @@ export interface ColumnInterface {
   id: string;
   name: string;
 }
+
+export interface DefaultStateInterface {
+  showSidebar: boolean;
+  search: string;
+  columns: ColumnInterface[];
+  tasks: TaskInterface[];
+  currentDate: string;
+  filteredTask: TaskInterface[];
+}
