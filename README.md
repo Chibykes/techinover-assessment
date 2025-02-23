@@ -22,7 +22,7 @@ This project was built using:
 Clone the repository and install dependencies:
 
 ```bash
-  git clone https://github.com/yourusername/techinover-assessment.git
+  git clone https://github.com/Chibykes/techinover-assessment.git
   cd techinover-assessment
   npm install
 ```
@@ -35,7 +35,6 @@ Clone the repository and install dependencies:
 
 ### 📸 Screenshots (Optional)
 
-(Include images to showcase UI/UX if applicable)
 ![App Preview](./src/assets/preview.gif)
 
 ### 📝 License
